@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&display=swap');
 :root {
+    --grid_padding: 0;
+    --board_width: auto;
     --control_panel_height: 25em;
 }
 
@@ -71,9 +73,9 @@ div.main {
 div.main_grid {
     height: 100%;
     display: grid;
-    grid-template-columns: auto 0.5em 30%;
+    grid-template-columns: var(--grid_padding, 0) var(--board_width, auto) 0.5em 30% var(--grid_padding, 0);
     grid-template-rows: 6em auto var(--control_panel_height, 25em);
-    grid-template-areas: "board . score" "board . ." "board . control_panel";
+    grid-template-areas: ". board . score ." ". board . . ." ". board . control_panel .";
     margin: 0.5em;
 }
 
