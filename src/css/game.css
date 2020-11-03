@@ -172,3 +172,11 @@ footer>p>a, footer>p>a:visited {
     color: black;
     text-decoration: none;
 }
+
+/* Responsive */
+
+@media (max-width: 480px) {
+    div.container {
+        width: 100%;
+    }
+}
