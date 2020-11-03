@@ -100,6 +100,25 @@ div.board {
     grid-area: board;
     background-color: grey;
     border-radius: 5px;
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "block0 block1 block2 block3" "block4 block5 block6 block7" "block8 block9 block10 block11" "block12 block13 block14 block15";
+    grid-gap: 0.5em 0.5em;
+    position: relative;
+}
+
+div.block {
+    background-color: darkgrey;
+    border-radius: 5px;
+}
+
+div.num_block {
+    position: absolute;
+    border-radius: 5px;
+    color: whitesmoke;
+    text-align: center;
 }
 
 div.control_panel {

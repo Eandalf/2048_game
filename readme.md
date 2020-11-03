@@ -5,9 +5,9 @@ The game is based on the ideas and the prototype of [2048](https://github.com/ga
 * Set up the layout of the game.
 * Set up the directory structure of the system.
 * Finished planning on the future work.
+* Finished the layout on the board (4*4).
 
 ## Plan
-* Finish the layout on the board (4*4).
 * Implement the moving functions and point-calculating functions.
 * Utilize cookie to record the best score.
 
