@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>2048</title>
+    <link href="src/css/game.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="src/js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="src/js/game.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>2048</h1>
+        </header>
+        <div id="main" class="main">
+            <div id="main_grid" class="main_grid">
+                <div class="score">
+                    <p class="score_title">Score/Best</p>
+                    <p class="score_mark"><span id="mark">0</span>/<span id="best">0</span></p>
+                </div>
+                <div id="board" class="board">
+
+                </div>
+                <div id="control_panel" class="control_panel">
+                    <div id="move_up" class="move_up">
+                        <span class="arrow">↑</span>
+                    </div>
+                    <div id="move_left" class="move_left">
+                        <span class="arrow">←</span>
+                    </div>
+                    <div id="move_right" class="move_right">
+                        <span class="arrow">→</span>
+                    </div>
+                    <div id="move_down" class="move_down">
+                        <span class="arrow">↓</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p><a href="https://github.com/Eandalf/2048_game">Source Code</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

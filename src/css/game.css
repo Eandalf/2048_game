@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@800&display=swap');
+:root {
+    --control_panel_height: 25em;
+}
+
+html, body, header, footer, hgroup, nav, article, section, figure, figcaption, h1, h2, h3, ul, li, body, div, p, img {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    border: 0;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    font-family: "Nunito Sans", "Arial", sans-serif;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: flex-start;
+}
+
+div.container {
+    width: 80%;
+    max-width: 1024px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    background-color: darkgray;
+    padding: 0.5em;
+    border-radius: 5px;
+}
+
+header, div.main, footer {
+    width: 100%;
+    background-color: papayawhip;
+}
+
+header, footer {
+    text-align: center;
+}
+
+/* header */
+
+header {
+    border-radius: 5px 5px 0 0;
+}
+
+header>h1 {
+    display: inline-block;
+    font-size: 4em;
+    line-height: 1.25em;
+    color: whitesmoke;
+    background-color: gold;
+    padding: 0 0.5em 0 0.5em;
+    border-radius: 5px;
+}
+
+/* main section */
+
+div.main {
+    flex: 1 1 0;
+}
+
+div.main_grid {
+    height: 100%;
+    display: grid;
+    grid-template-columns: auto 0.5em 30%;
+    grid-template-rows: 6em auto var(--control_panel_height, 25em);
+    grid-template-areas: "board . score" "board . ." "board . control_panel";
+    margin: 0.5em;
+}
+
+div.score {
+    grid-area: score;
+    min-width: 7.5em;
+    background-color: darkgray;
+    padding: 0.5em;
+    border-radius: 5px;
+    text-align: center;
+}
+
+p.score_title, p.score_mark {
+    color: whitesmoke;
+}
+
+p.score_mark {
+    font-size: 2.5em;
+}
+
+div.board {
+    grid-area: board;
+    background-color: grey;
+    border-radius: 5px;
+}
+
+div.control_panel {
+    grid-area: control_panel;
+    background-color: darkgray;
+    border-radius: 50%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: ". up ." "left . right" ". down .";
+    grid-gap: 0.2em 0.2em;
+}
+
+div.move_up, div.move_left, div.move_right, div.move_down {
+    background-color: darkorange;
+    text-align: center;
+}
+
+div.move_up {
+    grid-area: up;
+}
+
+div.move_left {
+    grid-area: left;
+}
+
+div.move_right {
+    grid-area: right;
+}
+
+div.move_down {
+    grid-area: down;
+}
+
+span.arrow {
+    color: whitesmoke;
+}
+
+div.move_up:hover, div.move_left:hover, div.move_right:hover, div.move_down:hover, span.arrow:hover {
+    cursor: pointer;
+}
+
+/* footer */
+
+footer {
+    height: 1.5em;
+    border-radius: 0 0 5px 5px;
+}
+
+footer>p>a, footer>p>a:visited {
+    color: black;
+    text-decoration: none;
+}
