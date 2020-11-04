@@ -21,6 +21,22 @@
     }
 
     $(document).ready(function () {
+        initializeLayout()
+
+        addNumBlock(0, 0, 2048);
+        addNumBlock(1, 0, 1024);
+        addNumBlock(2, 0, 512);
+        addNumBlock(3, 0, 256);
+        addNumBlock(0, 1, 128);
+        addNumBlock(1, 1, 64);
+        addNumBlock(2, 1, 32);
+        addNumBlock(3, 1, 16);
+        addNumBlock(0, 2, 8);
+        addNumBlock(1, 2, 4);
+        addNumBlock(2, 2, 2);
+    });
+
+    function initializeLayout() {
         // making the board a square
         var boardWidth = $("#board").width();
         var boardHeight = $("#board").height();
@@ -59,19 +75,7 @@
         // finding out the origin for the board's coordinates
         boardOriginX = boardPadding;
         boardOriginY = boardPadding;
-
-        addNumBlock(0, 0, 2048);
-        addNumBlock(1, 0, 1024);
-        addNumBlock(2, 0, 512);
-        addNumBlock(3, 0, 256);
-        addNumBlock(0, 1, 128);
-        addNumBlock(1, 1, 64);
-        addNumBlock(2, 1, 32);
-        addNumBlock(3, 1, 16);
-        addNumBlock(0, 2, 8);
-        addNumBlock(1, 2, 4);
-        addNumBlock(2, 2, 2);
-    });
+    }
 
     function addNumBlock(x, y, value) {
         /* x, y are integers, indicating the index on x and y coordinates */
