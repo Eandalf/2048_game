@@ -6,11 +6,12 @@ The game is based on the ideas and the prototype of [2048](https://github.com/ga
 * Set up the directory structure of the system.
 * Finished planning on the future work.
 * Finished the layout on the board (4*4).
+* Implemented the moving functions.
 
 ## Plan
-* Implement the moving functions and point-calculating functions.
+* Implement the point-calculating functions.
 * Utilize cookie to record the best score.
 
 ## Notice
-* The permissions and restrictions of the original 2048 game (The MIT License (MIT)) should also apply on this webpage version.
+* The permissions and restrictions of the original 2048 game (The MIT License (MIT)) should also be applied on this webpage version.
 * This piece of work is created solely for practicing and sharing my webpage programming skills. Please do not use it for commercial purposes.

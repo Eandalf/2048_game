@@ -19,21 +19,24 @@
         1024: "#FF8500",
         2048: "gold"
     }
+    const genValueThreshold = 0.66; // [0,1)
+    var board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ];
+    var boardBlockId = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ];
 
     $(document).ready(function () {
-        initializeLayout()
-
-        addNumBlock(0, 0, 2048);
-        addNumBlock(1, 0, 1024);
-        addNumBlock(2, 0, 512);
-        addNumBlock(3, 0, 256);
-        addNumBlock(0, 1, 128);
-        addNumBlock(1, 1, 64);
-        addNumBlock(2, 1, 32);
-        addNumBlock(3, 1, 16);
-        addNumBlock(0, 2, 8);
-        addNumBlock(1, 2, 4);
-        addNumBlock(2, 2, 2);
+        initializeLayout();
+        initializeBoard();
+        registerButtons();
     });
 
     function initializeLayout() {
@@ -77,8 +80,84 @@
         boardOriginY = boardPadding;
     }
 
+    function initializeBoard() {
+        generateRandomNumBlock();
+    }
+
+    function generateRandomNumBlock() {
+        var spaceCount = 0;
+        var board_blank = findSpace();
+        board_blank.forEach(function (row) {
+            spaceCount += row.reduce((a, b) => a + b, 0);
+        });
+
+        var numToGen = 0;
+        if (spaceCount > 10) {
+            numToGen = 3;
+        } else if (spaceCount > 5) {
+            numToGen = 2;
+        } else if (spaceCount > 0) {
+            numToGen = 1;
+        }
+
+        var positions = [];
+        while (positions.length < numToGen) {
+            var r = Math.floor(Math.random() * spaceCount);
+            if (positions.indexOf(r) === -1) positions.push(r);
+        }
+
+        positions.forEach(function (position) {
+            var coordinates = positionToXY(position, board_blank);
+            var x = coordinates[0];
+            var y = coordinates[1];
+
+            var value = Math.pow(2, (Math.random() > genValueThreshold) ? 2 : 1);
+            addNumBlock(x, y, value);
+        });
+    }
+
+    // Find the empty block on the board
+    // Matrix element: 1: empty; 0: occupied
+    function findSpace() {
+        var board_blank = [];
+        for (var y = 0; y < board.length; y++) {
+            board_blank.push([]);
+            for (var x = 0; x < board[y].length; x++) {
+                if (board[y][x] != 0) {
+                    board_blank[y].push(0);
+                } else {
+                    board_blank[y].push(1);
+                }
+            }
+        }
+        return board_blank;
+    }
+
+    // Finding the corresponding x,y index for a position in the random sequence
+    // Return [x, y]
+    function positionToXY(position, board_blank) {
+        var count = 0;
+        var coordinates = [];
+        board_blank.forEach(function (row, indexY) {
+            row.forEach(function (element, indexX) {
+                if (element == 1) {
+                    if (count == position) {
+                        coordinates.push(indexX);
+                        coordinates.push(indexY);
+                    }
+                    count++;
+                }
+            });
+        });
+        return coordinates;
+    }
+
     function addNumBlock(x, y, value) {
         /* x, y are integers, indicating the index on x and y coordinates */
+        board[y][x] = value;
+        blockCreationCounter++;
+        boardBlockId[y][x] = blockCreationCounter;
+
         var numBlock = document.createElement("div");
         numBlock.classList.add("num_block");
         numBlock.setAttribute("id", "num_block_" + blockCreationCounter);
@@ -92,9 +171,171 @@
             "top": "" + (boardOriginY + y * (numBlockHeight + boardPadding)) + "px",
             "background-color": numToColor[value]
         })
-        console.log(x);
-        console.log(y);
-        console.log(value);
         $("#board").append(numBlock);
+    }
+
+    function registerButtons() {
+        $("#move_up").click(function (event) {
+            event.preventDefault();
+            slide('N');
+            setTimeout(generateRandomNumBlock, 1000);
+        });
+        $("#move_left").click(function (event) {
+            event.preventDefault();
+            slide('W');
+            setTimeout(generateRandomNumBlock, 1000);
+        });
+        $("#move_right").click(function (event) {
+            event.preventDefault();
+            slide('E');
+            setTimeout(generateRandomNumBlock, 1000);
+        });
+        $("#move_down").click(function (event) {
+            event.preventDefault();
+            slide('S');
+            setTimeout(generateRandomNumBlock, 1000);
+        });
+    }
+
+    function slide(direction) {
+        var seq = [0, 1, 2, 3];
+        switch (direction) {
+            case 'N':
+                seq.forEach(element => move1d("y", element, "d"));
+                break;
+            case 'W':
+                seq.forEach(element => move1d("x", element, "d"));
+                break;
+            case 'S':
+                seq.forEach(element => move1d("y", element, "i"));
+                break;
+            case 'E':
+                seq.forEach(element => move1d("x", element, "i"));
+                break;
+        }
+    }
+
+    // Moving along an axis
+    // axis: along x/y axis; index: which row/column;
+    // direction: "i": increasing direction (e.g., y=0 -> y=3), "d": decreasing direction;
+    function move1d(axis, index, direction) {
+        move1dHandle(axis, index, direction, 3);
+    }
+
+    // step: from 3 to 0, indicating the remaining blocks to handle (from the farest one to the target wall);
+    function move1dHandle(axis, index, direction, step) {
+        if (step <= 0) {
+            return;
+        }
+
+        var step_real = step;
+        var delta = -1;
+        if (direction == "i") {
+            step_real = 3 - step;
+            delta = 1;
+        }
+
+        var nextPos = 0;
+        if (axis == "y") {
+            move1dHandle(axis, index, direction, step - 1);
+            if (board[step_real][index] == 0) {
+                // Nothing there to be handled
+            } else {
+                nextPos = step_real + delta;
+                if (nextPos >= 0 && nextPos < 4) {
+                    if (board[nextPos][index] == 0) {
+                        // the block of next position is empty
+                        move(index, step_real, index, nextPos);
+                        move1dHandle(axis, index, direction, step - 1);
+                    } else if (board[step_real][index] == board[nextPos][index]) {
+                        merge(index, nextPos, index, step_real);
+                        // If any changes of blocks occur, re-compute from the farest end.
+                        move1dHandle(axis, index, direction, step - 1);
+                    }
+                }
+            }
+        } else {
+            move1dHandle(axis, index, direction, step - 1);
+            if (board[index][step_real] == 0) {
+                // Nothing there to be handled
+            } else {
+                nextPos = step_real + delta;
+                if (nextPos >= 0 && nextPos < 4) {
+                    if (board[index][nextPos] == 0) {
+                        // the block of next position is empty
+                        move(step_real, index, nextPos, index);
+                        move1dHandle(axis, index, direction, step - 1);
+                    } else if (board[index][step_real] == board[index][nextPos]) {
+                        merge(nextPos, index, step_real, index);
+                        // If any changes of blocks occur, re-compute from the farest end.
+                        move1dHandle(axis, index, direction, step - 1);
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+    // Move the target block to target x & target y
+    function move(x, y, tx, ty) {
+        // checking
+        if (board[ty][tx] != 0) {
+            return;
+        }
+
+        // animation
+        let blockId = boardBlockId[y][x];
+        let moveX = (tx - x) * (numBlockWidth + boardPadding);
+        let moveY = (ty - y) * (numBlockHeight + boardPadding);
+        $("#num_block_" + blockId).css({
+            "transform": "translate(" + moveX + "px, " + moveY + "px)"
+        });
+        $("#num_block_" + blockId).css({
+            "left": "" + (boardOriginX + tx * (numBlockWidth + boardPadding)) + "px",
+            "top": "" + (boardOriginY + ty * (numBlockHeight + boardPadding)) + "px",
+            "transform": "none"
+        });
+
+        // update the board and boardBlockId matrix
+        boardBlockId[ty][tx] = boardBlockId[y][x];
+        boardBlockId[y][x] = 0;
+        board[ty][tx] = board[y][x];
+        board[y][x] = 0;
+    }
+
+    // Merging two blocks to the first block's location
+    function merge(x1, y1, x2, y2) {
+        // checking
+        if (board[y1][x1] != board[y2][x2]) {
+            return;
+        }
+
+        var block1Id = boardBlockId[y1][x1];
+        var block2Id = boardBlockId[y2][x2];
+        var value = board[y1][x1] + board[y2][x2];
+
+        // animation
+        let moveX = (x1 - x2) * (numBlockWidth + boardPadding);
+        let moveY = (y1 - y2) * (numBlockHeight + boardPadding);
+        $("#num_block_" + block2Id).css({
+            "transform": "translate(" + moveX + "px, " + moveY + "px)"
+        });
+        $("#num_block_" + block2Id).css({
+            "left": "" + (boardOriginX + x1 * (numBlockWidth + boardPadding)) + "px",
+            "top": "" + (boardOriginY + y1 * (numBlockHeight + boardPadding)) + "px",
+            "transform": "none"
+        });
+
+        // delete two blocks, reset the values for the location on board & boardBlockId
+        $("#num_block_" + block1Id).remove();
+        boardBlockId[y1][x1] = 0;
+        board[y1][x1] = 0;
+
+        $("#num_block_" + block2Id).remove();
+        boardBlockId[y2][x2] = 0;
+        board[y2][x2] = 0;
+
+        // create the merged block
+        addNumBlock(x1, y1, value);
     }
 })();
