@@ -41,6 +41,7 @@
         initializeLayout();
         initializeBoard();
         registerButtons();
+        registerKeyboards()
         initializeBest();
         $("div.wall").hide();
     });
@@ -184,25 +185,73 @@
 
     function registerButtons() {
         $("#move_up").click(function (event) {
-            event.preventDefault();
-            slide('N');
-            setTimeout(generateRandomNumBlock, 500);
+            moveUp(event);
         });
         $("#move_left").click(function (event) {
-            event.preventDefault();
-            slide('W');
-            setTimeout(generateRandomNumBlock, 500);
+            moveLeft(event);
         });
         $("#move_right").click(function (event) {
-            event.preventDefault();
-            slide('E');
-            setTimeout(generateRandomNumBlock, 500);
+            moveRight(event);
         });
         $("#move_down").click(function (event) {
-            event.preventDefault();
-            slide('S');
-            setTimeout(generateRandomNumBlock, 500);
+            moveDown(event);
         });
+    }
+
+    function registerKeyboards() {
+        document.addEventListener("keydown", (event) => {
+            var key = event.key || event.keyCode;
+            switch(key){
+                case "ArrowUp":
+                case 38:
+                case "W":
+                case "w":
+                    moveUp(event);
+                    break;
+                case "ArrowLeft":
+                case 37:
+                case "A":
+                case "a":
+                    moveLeft(event);
+                    break;
+                case "ArrowRight":
+                case 39:
+                case "D":
+                case "d":
+                    moveRight(event);
+                    break;
+                case "ArrowDown":
+                case 40:
+                case "S":
+                case "s":
+                    moveDown(event);
+                    break;
+            }
+        });
+    }
+
+    function moveUp(event) {
+        event.preventDefault();
+        slide('N');
+        setTimeout(generateRandomNumBlock, 500);
+    }
+
+    function moveLeft(event) {
+        event.preventDefault();
+        slide('W');
+        setTimeout(generateRandomNumBlock, 500);
+    }
+
+    function moveRight(event) {
+        event.preventDefault();
+        slide('E');
+        setTimeout(generateRandomNumBlock, 500);
+    }
+
+    function moveDown(event) {
+        event.preventDefault();
+        slide('S');
+        setTimeout(generateRandomNumBlock, 500);
     }
 
     function slide(direction) {

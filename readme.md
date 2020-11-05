@@ -1,6 +1,9 @@
 # 2048 Game Remake on Webpage
 The game was based on the ideas and the prototype of [2048](https://github.com/gabrielecirulli/2048) by [gabrielecirulli](https://github.com/gabrielecirulli).
 
+## Usage
+* Could use arrow keys (up, down, left, and right), w/s/a/d, and W/S/A/D to control the moving direction of the blocks.
+
 ## Libraries & Resources
 * jQuery [3.5.1](https://jquery.com/)
 * Images
@@ -21,9 +24,10 @@ The game was based on the ideas and the prototype of [2048](https://github.com/g
 * Implemented the point-calculating functions.
 * Utilized cookie to record the best score.
 * Finished the game lose condition.
+* Added keyboard control.
 
 ## Plan
-* Add keyboard control.
+None
 
 ## Notice
 * The permissions and restrictions of the original 2048 game (The MIT License (MIT)) should also be applied on this webpage version.
