@@ -27,7 +27,7 @@ body {
 
 div.container {
     width: 80%;
-    max-width: 1024px;
+    max-width: 768px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
