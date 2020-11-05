@@ -289,11 +289,12 @@
         let moveY = (ty - y) * (numBlockHeight + boardPadding);
         $("#num_block_" + blockId).css({
             "transform": "translate(" + moveX + "px, " + moveY + "px)"
-        });
-        $("#num_block_" + blockId).css({
-            "left": "" + (boardOriginX + tx * (numBlockWidth + boardPadding)) + "px",
-            "top": "" + (boardOriginY + ty * (numBlockHeight + boardPadding)) + "px",
-            "transform": "none"
+        }).promise().done(function () {
+            $("#num_block_" + blockId).css({
+                "left": "" + (boardOriginX + tx * (numBlockWidth + boardPadding)) + "px",
+                "top": "" + (boardOriginY + ty * (numBlockHeight + boardPadding)) + "px",
+                "transform": "none"
+            });
         });
 
         // update the board and boardBlockId matrix
@@ -319,23 +320,24 @@
         let moveY = (y1 - y2) * (numBlockHeight + boardPadding);
         $("#num_block_" + block2Id).css({
             "transform": "translate(" + moveX + "px, " + moveY + "px)"
+        }).promise().done(function () {
+            $("#num_block_" + block2Id).css({
+                "left": "" + (boardOriginX + x1 * (numBlockWidth + boardPadding)) + "px",
+                "top": "" + (boardOriginY + y1 * (numBlockHeight + boardPadding)) + "px",
+                "transform": "none"
+            }).promise().done(function () {
+                // delete two blocks, reset the values for the location on board & boardBlockId
+                $("#num_block_" + block1Id).remove();
+                boardBlockId[y1][x1] = 0;
+                board[y1][x1] = 0;
+
+                $("#num_block_" + block2Id).remove();
+                boardBlockId[y2][x2] = 0;
+                board[y2][x2] = 0;
+
+                // create the merged block
+                addNumBlock(x1, y1, value);
+            });
         });
-        $("#num_block_" + block2Id).css({
-            "left": "" + (boardOriginX + x1 * (numBlockWidth + boardPadding)) + "px",
-            "top": "" + (boardOriginY + y1 * (numBlockHeight + boardPadding)) + "px",
-            "transform": "none"
-        });
-
-        // delete two blocks, reset the values for the location on board & boardBlockId
-        $("#num_block_" + block1Id).remove();
-        boardBlockId[y1][x1] = 0;
-        board[y1][x1] = 0;
-
-        $("#num_block_" + block2Id).remove();
-        boardBlockId[y2][x2] = 0;
-        board[y2][x2] = 0;
-
-        // create the merged block
-        addNumBlock(x1, y1, value);
     }
 })();

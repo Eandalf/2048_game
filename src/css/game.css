@@ -119,6 +119,7 @@ div.num_block {
     border-radius: 5px;
     color: whitesmoke;
     text-align: center;
+    transition-duration: 500ms;
 }
 
 div.control_panel {
