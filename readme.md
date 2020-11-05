@@ -27,7 +27,8 @@ The game was based on the ideas and the prototype of [2048](https://github.com/g
 * Added keyboard control.
 
 ## Plan
-None
+* Add sliding gesture detection (touch events on smartphones).
+* Tune the layout for mobile devices.
 
 ## Notice
 * The permissions and restrictions of the original 2048 game (The MIT License (MIT)) should also be applied on this webpage version.
