@@ -35,6 +35,7 @@
     var score = 0;
     var best = 0;
     var gameWon = false;
+    var gameStuck = false;
 
     $(document).ready(function () {
         initializeLayout();
@@ -103,6 +104,8 @@
             numToGen = 2;
         } else if (spaceCount > 0) {
             numToGen = 1;
+        } else if (spaceCount == 0) {
+            gameStuck = true;
         }
 
         var positions = [];
@@ -203,6 +206,14 @@
     }
 
     function slide(direction) {
+        // check if the game is stuck
+        if (gameStuck) {
+            if (score > best) {
+                updateBest(score);
+            }
+            showLose();
+        }
+
         var seq = [0, 1, 2, 3];
         switch (direction) {
             case 'N':
@@ -226,13 +237,6 @@
                 updateBest(score);
             }
             showWin();
-        }
-        // check if the game is stuck
-        if (checkIfStuck()) {
-            if (score > best) {
-                updateBest(score);
-            }
-            showLose();
         }
     }
 
@@ -381,11 +385,6 @@
         } else {
             return false;
         }
-    }
-
-    function checkIfStuck() {
-        // TO DO
-        return false;
     }
 
     function initializeBest() {
