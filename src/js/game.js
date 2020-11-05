@@ -32,11 +32,16 @@
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ];
+    var score = 0;
+    var best = 0;
+    var gameWon = false;
 
     $(document).ready(function () {
         initializeLayout();
         initializeBoard();
         registerButtons();
+        initializeBest();
+        $("div.wall").hide();
     });
 
     function initializeLayout() {
@@ -178,22 +183,22 @@
         $("#move_up").click(function (event) {
             event.preventDefault();
             slide('N');
-            setTimeout(generateRandomNumBlock, 1000);
+            setTimeout(generateRandomNumBlock, 500);
         });
         $("#move_left").click(function (event) {
             event.preventDefault();
             slide('W');
-            setTimeout(generateRandomNumBlock, 1000);
+            setTimeout(generateRandomNumBlock, 500);
         });
         $("#move_right").click(function (event) {
             event.preventDefault();
             slide('E');
-            setTimeout(generateRandomNumBlock, 1000);
+            setTimeout(generateRandomNumBlock, 500);
         });
         $("#move_down").click(function (event) {
             event.preventDefault();
             slide('S');
-            setTimeout(generateRandomNumBlock, 1000);
+            setTimeout(generateRandomNumBlock, 500);
         });
     }
 
@@ -212,6 +217,22 @@
             case 'E':
                 seq.forEach(element => move1d("x", element, "i"));
                 break;
+        }
+
+        // check if the game ends
+        // check if win
+        if (gameWon) {
+            if (score > best) {
+                updateBest(score);
+            }
+            showWin();
+        }
+        // check if the game is stuck
+        if (checkIfStuck()) {
+            if (score > best) {
+                updateBest(score);
+            }
+            showLose();
         }
     }
 
@@ -337,7 +358,90 @@
 
                 // create the merged block
                 addNumBlock(x1, y1, value);
+
+                // add some points to the score
+                addScore(value);
+
+                // check if win
+                gameWon = checkIfWin(value);
             });
         });
+    }
+
+    function addScore(points) {
+        score += points;
+
+        // refresh the displayed score
+        $("#mark").html(score.toString());
+    }
+
+    function checkIfWin(value) {
+        if (value >= 2048) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkIfStuck() {
+        // TO DO
+        return false;
+    }
+
+    function initializeBest() {
+        // read the best score from the cookie
+        var bestSaved = getCookie("best");
+        if (bestSaved != "") {
+            best = parseInt(bestSaved);
+        }
+
+        displayBest();
+    }
+
+    function updateBest(points) {
+        best = points;
+        displayBest();
+
+        // write into the cookie
+        setCookie("best", best, 30);
+    }
+
+    function displayBest() {
+        // refresh the displayed best score
+        $("#best").html(best.toString());
+    }
+
+    /* From w3schools.com, retrieved from: https://www.w3schools.com/js/js_cookies.asp */
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    /* From w3schools.com, retrieved from: https://www.w3schools.com/js/js_cookies.asp */
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function showWin() {
+        $("div.wall").show();
+        $("div.win").show();
+    }
+
+    function showLose() {
+        $("div.wall").show();
+        $("div.lose").show();
     }
 })();
